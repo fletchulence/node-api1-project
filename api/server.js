@@ -1,6 +1,6 @@
 // BUILD YOUR SERVER HERE
 const express = require('express');
-// const Users =require('./users/model')
+const User =require('./users/model')
 // const usersRouter = require('./users/usersRouter')
 
 const server = express();
@@ -13,8 +13,29 @@ server.get('/hello', (req, res)=>{
    res.json({ message: 'hi im here'})
 })
 
-server.get('/api/users', (req, res)=>{
+// [GET]
+server.get('/api/users', async (req, res)=>{
+   const allUsers = await User.find()
+   try{
+      // console.log(`happening`)
+      res.json(allUsers)
+   } catch(err){
+      console.log(err)
+   }
+})
 
+// [POST]
+server.post('/api/users', async (req, res)=>{
+   try{
+      if( !req.body ){
+         res.status(400).json({ message: 'sorry, you cant get in here'})
+      } else{
+         const newUser = await User.insert(req.body)
+         res.json(newUser)
+      }
+   } catch(err){
+      console.log(`err`, err)
+   }
 })
 
 module.exports = server; // EXPORT YOUR SERVER instead of {}
