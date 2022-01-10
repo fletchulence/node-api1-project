@@ -24,14 +24,15 @@ server.get('/api/users', async (req, res)=>{
    }
 })
 
-// [POST]
+// [POST] this should be posting all things
+// need to allow only ones that have the correct body
 server.post('/api/users', async (req, res)=>{
    try{
-      if( !req.body ){
-         res.status(400).json({ message: 'sorry, you cant get in here'})
+      if( !req.body.name || !req.body.bio ){
+         res.status(400).json({ message: 'provide name and bio'})
       } else{
          const newUser = await User.insert(req.body)
-         res.json(newUser)
+         res.status(201).json(newUser)
       }
    } catch(err){
       console.log(`err`, err)
