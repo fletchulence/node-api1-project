@@ -17,10 +17,9 @@ server.get('/hello', (req, res)=>{
 server.get('/api/users', async (req, res)=>{
    const allUsers = await User.find()
    try{
-      // console.log(`happening`)
       res.json(allUsers)
    } catch(err){
-      console.log(err)
+      res.status(500).json({ message: 'The users information could not be retrieved'})
    }
 })
 
@@ -35,7 +34,22 @@ server.post('/api/users', async (req, res)=>{
          res.status(201).json(newUser)
       }
    } catch(err){
-      console.log(`err`, err)
+      res.status(500).json({ message: 'There was an error while saving the user to the database'})
+   }
+})
+
+// [GET] getById
+server.get('/api/users/:id', async (req, res)=>{
+   const { id } = req.params.id
+   const user = await User.findById( id )
+   try{
+      if( !user ){
+         res.status(400)
+      } else{
+
+      }
+   } catch(err){
+      res.status(500).json({ message: err.message })
    }
 })
 
